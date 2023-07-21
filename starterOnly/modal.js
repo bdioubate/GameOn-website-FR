@@ -82,8 +82,6 @@ function validateChamp(champ) {
 function validateDate() {
   
   const date = document.getElementById("birthdate")
-  //const dateMin = new Date(1900,1,1)
-  //const dateMax = new Date(2015,1,1)
   const anneeMin = 1900
   const anneeMax = 2015
 
@@ -148,14 +146,11 @@ function AfficheMessageErreur(erreur) {
   if(phrase.split(' ').length === 1) {
     let balise = document.getElementById(`${erreur.message}`)
     if(balise.checked === false) {
-      console.log(erreur)
       balise.parentNode.dataset.errorVisible = true
       balise.parentNode.dataset.error = `${balise.name} obligatoire !`
     }
   } else {
       let balise = document.getElementById(`${phrase.split(' ')[phrase.split(' ').length-1]}`)
-      console.log("phrase lllllll : "+phrase)
-      console.log("balise lllllll : "+balise)
       balise.parentNode.dataset.errorVisible = true
       balise.parentNode.dataset.error = `${phrase.replaceAll(`${phrase.split(' ').pop()}`, ' ')}`
   }
