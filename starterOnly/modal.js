@@ -4,20 +4,40 @@ function editNav() {
     x.className += " responsive";
   } else {
     x.className = "topnav";
-  }
+  } 
 }
 
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-
+const topNavMobile = document.querySelector(".topnav.responsive");
+const screenMobile = window.matchMedia("(max-width: 768px)")
+const modal = document.querySelector(".bground .content");
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 // launch modal form
 function launchModal() {
   modalbg.style.display = "block";
+  if(screenMobile.matches){
+    modalbg.style.background = "none";
+    modalbg.style.top = "initial";
+    modalbg.style.bottom = "0";
+    modalbg.style.minHeight = "600px";
+    modalbg.style.height = "90vh";
+    modalbg.style.maxHeight = "90vh";
+
+    modal.style.maxWidth = "100%"
+    modal.style.height = "100%"
+    modal.style.minHeight = "100%"
+    modal.style.margin = "0"
+
+    window.scrollTo(0, 0);
+  }
+  else{
+    modalbg.style.backgroundColor = "#ffffff";
+  }
 }
 
 // Bouton fermer modal 
@@ -32,11 +52,24 @@ function closeModal() {
 /**
  * Cette fonction prend un id en parametre pour verifier si le champ est vide 
  * @param {string} champ 
- * @throws {Error}
+ * @throws {Error} 
  */
 function validateChamp(champ) {
+  const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
     if(champ.value === "") {
       throw new Error(`${champ.id}`)
+    }
+    else if((champ.id === "first") && champ.value.length < 2  ) {
+      throw new Error(`Le prénom doit comporter au moins 2 caractères ! ${champ.id}`)
+    }
+    else if((champ.id === "last") && champ.value.length < 2  ) {
+      throw new Error(`Le nom doit comporter au moins 2 caractères ! ${champ.id}`)
+    }
+    else if(champ.id === "email" && regex.test(champ.value) === false) {
+      throw new Error(`Veuillez remplir correctement votre e-mail ! ${champ.id}`)
+    }
+    else if(champ.id === "quantity" && (champ.value < 0 || champ.value > 100 )) {
+      throw new Error(`Entre 0 et 100 ! ${champ.id}`)
     }
     else {
       SupprimeMessageErreur(`${champ.id}`)
@@ -44,11 +77,33 @@ function validateChamp(champ) {
 }
 
 /**
+ * Cette fonction verifie si le champ date est compris entre 01/01/1900 a 01/01/2015
+ */
+function validateDate() {
+  
+  const date = document.getElementById("birthdate")
+  //const dateMin = new Date(1900,1,1)
+  //const dateMax = new Date(2015,1,1)
+  const anneeMin = 1900
+  const anneeMax = 2015
+
+  let datePartie = date.value.split("-")
+  let annee = Number(datePartie[0])
+
+  
+  if(annee < anneeMin || annee > anneeMax ) {
+    throw new Error("Veuillez remplir correctement votre date de naissance ! birthdate")
+  } else {
+    SupprimeMessageErreur("birthdate")
+  }
+}
+
+/**
  * Cette fonction permet de verifier si l'utilisateur a fait un choix
  * @throws {Error}
  */
 function validateRadio() {
-  let baliseLocation = document.querySelectorAll('input[name="location"]')
+  let baliseLocation = document.querySelectorAll('input[name="ville"]')
   for (let i = 0; i < baliseLocation.length; i++) {
     if (baliseLocation[i].checked) {
       SupprimeMessageErreur("location1")
@@ -76,14 +131,33 @@ function validateCheckbox1() {
 
 //reel
 /**
+ * Cette fonction permet de gerer la validation des champs du formulaire avec la fonction validateChamp
+ * @param {function validateChamp(champ)}
+ * @param {*} id 
+ */
+function gererValidateChamp(id) {
+  validateChamp(id)
+}
+
+/**
  * Cette fonction permet d'afficher le message d'erreur
  * @param {string} erreur
  */
 function AfficheMessageErreur(erreur) {
-  let balise = document.getElementById(`${erreur.message}`)
-  if(balise.checked === false) {
-    balise.parentNode.dataset.errorVisible = true
-    balise.parentNode.dataset.error = "Cette Action est obligatoire !"
+  const phrase = erreur.message
+  if(phrase.split(' ').length === 1) {
+    let balise = document.getElementById(`${erreur.message}`)
+    if(balise.checked === false) {
+      console.log(erreur)
+      balise.parentNode.dataset.errorVisible = true
+      balise.parentNode.dataset.error = `${balise.name} obligatoire !`
+    }
+  } else {
+      let balise = document.getElementById(`${phrase.split(' ')[phrase.split(' ').length-1]}`)
+      console.log("phrase lllllll : "+phrase)
+      console.log("balise lllllll : "+balise)
+      balise.parentNode.dataset.errorVisible = true
+      balise.parentNode.dataset.error = `${phrase.replaceAll(`${phrase.split(' ').pop()}`, ' ')}`
   }
 }
 
@@ -95,6 +169,19 @@ function SupprimeMessageErreur(erreur) {
   let balise = document.getElementById(`${erreur}`)
   delete balise.parentNode.dataset.errorVisible
   delete balise.parentNode.dataset.error 
+}
+
+/**
+ * Cette fonction permet de gerer le formulaire
+ */
+function gererFormulaire() {
+  gererValidateChamp(first)
+  gererValidateChamp(last)
+  gererValidateChamp(email)
+  validateDate()
+  gererValidateChamp(quantity)
+  validateRadio()
+  validateCheckbox1()
 }
 
 /**
@@ -134,31 +221,13 @@ function modifierModal() {
  */
 function validate() {
   try {
-      let balisePrenom = document.getElementById("first")
-      validateChamp(balisePrenom)
-    
-      let baliseNom = document.getElementById("last")
-      validateChamp(baliseNom)
-  
-      let baliseEmail = document.getElementById("email")
-      validateChamp(baliseEmail)
-
-      let baliseDate = document.getElementById("birthdate")
-      validateChamp(baliseDate)
-
-      let baliseNumber = document.getElementById("quantity")
-      validateChamp(baliseNumber)
-    
-      validateRadio()
-    
-      validateCheckbox1()
-    
+    gererFormulaire()
   } catch(Error) {
     AfficheMessageErreur(Error)
     return false
   }
   
-  return true 
+  return true
 }
 
 
@@ -167,7 +236,7 @@ let form = document.querySelector("form")
 form.addEventListener("submit", (event) => {
     event.preventDefault()
     if(!validate()) {
-      return validate()
+      return
     }
     modifierModal()
 })

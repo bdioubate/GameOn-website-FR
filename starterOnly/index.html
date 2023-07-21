@@ -61,6 +61,7 @@
               action="index.html"
               method="get"
               onsubmit="return validate();"
+              novalidate
             >
               <div
                 class="formData">
@@ -69,7 +70,7 @@
                   class="text-control"
                   type="text"
                   id="first"
-                  name="first"
+                  name="prénom"
                   minlength="2"
                 /><br>
               </div>
@@ -80,7 +81,7 @@
                   class="text-control"
                   type="text"
                   id="last"
-                  name="last"
+                  name="nom"
                 /><br>
               </div>
               <div
@@ -100,13 +101,13 @@
                   class="text-control"
                   type="date"
                   id="birthdate"
-                  name="birthdate"
+                  name="date de naissance"
                 /><br>
               </div>
               <div
                 class="formData" >
                 <label>À combien de tournois GameOn avez-vous déjà participé ?</label><br>
-                <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99">
+                <input type="number" class="text-control" id="quantity" name="chiffre(s)" min="0" max="99">
               </div>
               <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?</p>
               <div
@@ -115,7 +116,7 @@
                   class="checkbox-input"
                   type="radio"
                   id="location1"
-                  name="location"
+                  name="ville"
                   value="New York"
                 />
                 <label class="checkbox-label" for="location1">
@@ -126,7 +127,7 @@
                   class="checkbox-input"
                   type="radio"
                   id="location2"
-                  name="location"
+                  name="ville"
                   value="San Francisco"
                 />
                 <label class="checkbox-label" for="location2">
@@ -137,7 +138,7 @@
                   class="checkbox-input"
                   type="radio"
                   id="location3"
-                  name="location"
+                  name="ville"
                   value="Seattle"
                 />
                 <label class="checkbox-label" for="location3">
@@ -148,7 +149,7 @@
                   class="checkbox-input"
                   type="radio"
                   id="location4"
-                  name="location"
+                  name="ville"
                   value="Chicago"
                 />
                 <label class="checkbox-label" for="location4">
@@ -159,7 +160,7 @@
                   class="checkbox-input"
                   type="radio"
                   id="location5"
-                  name="location"
+                  name="ville"
                   value="Boston"
                 />
                 <label class="checkbox-label" for="location5">
@@ -170,7 +171,7 @@
                   class="checkbox-input"
                   type="radio"
                   id="location6"
-                  name="location"
+                  name="ville"
                   value="Portland"
                 />
                 <label class="checkbox-label" for="location6">
@@ -185,6 +186,7 @@
                   class="checkbox-input"
                   type="checkbox"
                   id="checkbox1"
+                  name="conditions d'utilisation"
                   checked
                 /> 
                 <label class="checkbox2-label" for="checkbox1" required>
